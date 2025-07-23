@@ -1,0 +1,170 @@
+{
+  "authentication": {
+    "passed": 0,
+    "failed": 4,
+    "tests": [
+      {
+        "testName": "Director Login",
+        "passed": false,
+        "message": "No token in response",
+        "timestamp": "2025-07-23T14:14:45.661Z"
+      },
+      {
+        "testName": "Token Validation",
+        "passed": false,
+        "message": "Endpoint non trouvé",
+        "timestamp": "2025-07-23T14:14:45.675Z"
+      },
+      {
+        "testName": "Role-based Access",
+        "passed": false,
+        "message": "Token invalide",
+        "timestamp": "2025-07-23T14:14:45.677Z"
+      },
+      {
+        "testName": "Token Refresh",
+        "passed": false,
+        "message": "Token de rafraîchissement requis",
+        "timestamp": "2025-07-23T14:14:45.681Z"
+      }
+    ]
+  },
+  "notifications": {
+    "passed": 0,
+    "failed": 5,
+    "tests": [
+      {
+        "testName": "Get Templates",
+        "passed": false,
+        "message": "Token invalide",
+        "timestamp": "2025-07-23T14:14:45.685Z"
+      },
+      {
+        "testName": "Notification History",
+        "passed": false,
+        "message": "Token invalide",
+        "timestamp": "2025-07-23T14:14:45.689Z"
+      },
+      {
+        "testName": "Notification Stats",
+        "passed": false,
+        "message": "Endpoint non trouvé",
+        "timestamp": "2025-07-23T14:14:45.692Z"
+      },
+      {
+        "testName": "Email Configuration",
+        "passed": false,
+        "message": "Endpoint non trouvé",
+        "timestamp": "2025-07-23T14:14:45.696Z"
+      },
+      {
+        "testName": "SMS Configuration",
+        "passed": false,
+        "message": "Endpoint non trouvé",
+        "timestamp": "2025-07-23T14:14:45.700Z"
+      }
+    ]
+  },
+  "parentPortal": {
+    "passed": 0,
+    "failed": 5,
+    "tests": [
+      {
+        "testName": "Parent Dashboard",
+        "passed": false,
+        "message": "Token invalide",
+        "timestamp": "2025-07-23T14:14:45.703Z"
+      },
+      {
+        "testName": "Child Details",
+        "passed": false,
+        "message": "Endpoint non trouvé",
+        "timestamp": "2025-07-23T14:14:45.704Z"
+      },
+      {
+        "testName": "Payment History",
+        "passed": false,
+        "message": "Token invalide",
+        "timestamp": "2025-07-23T14:14:45.705Z"
+      },
+      {
+        "testName": "Profile Management",
+        "passed": false,
+        "message": "Endpoint non trouvé",
+        "timestamp": "2025-07-23T14:14:45.706Z"
+      },
+      {
+        "testName": "Care Services",
+        "passed": false,
+        "message": "Endpoint non trouvé",
+        "timestamp": "2025-07-23T14:14:45.708Z"
+      }
+    ]
+  },
+  "database": {
+    "passed": 0,
+    "failed": 4,
+    "tests": [
+      {
+        "testName": "Database Connection",
+        "passed": false,
+        "message": "Request failed with status code 404",
+        "timestamp": "2025-07-23T14:14:45.710Z"
+      },
+      {
+        "testName": "Schema Alignment",
+        "passed": false,
+        "message": "Token invalide",
+        "timestamp": "2025-07-23T14:14:45.712Z"
+      },
+      {
+        "testName": "Data Integrity",
+        "passed": false,
+        "message": "Token invalide",
+        "timestamp": "2025-07-23T14:14:45.714Z"
+      },
+      {
+        "testName": "Transaction Safety",
+        "passed": false,
+        "message": "Token invalide",
+        "timestamp": "2025-07-23T14:14:45.717Z"
+      }
+    ]
+  },
+  "integration": {
+    "passed": 2,
+    "failed": 3,
+    "tests": [
+      {
+        "testName": "API Documentation",
+        "passed": true,
+        "message": "Swagger docs accessible",
+        "timestamp": "2025-07-23T14:14:45.731Z"
+      },
+      {
+        "testName": "CORS Configuration",
+        "passed": false,
+        "message": "CORS not configured",
+        "timestamp": "2025-07-23T14:14:45.733Z"
+      },
+      {
+        "testName": "Error Handling",
+        "passed": true,
+        "message": "Proper error responses",
+        "timestamp": "2025-07-23T14:14:45.745Z"
+      },
+      {
+        "testName": "Performance",
+        "passed": false,
+        "message": "Request failed with status code 401",
+        "timestamp": "2025-07-23T14:14:45.747Z"
+      },
+      {
+        "testName": "Frontend-Backend Integration",
+        "passed": false,
+        "message": "Frontend server not running or not accessible",
+        "timestamp": "2025-07-23T14:14:45.749Z"
+      }
+    ]
+  }
+}

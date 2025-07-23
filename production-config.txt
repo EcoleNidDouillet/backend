@@ -1,0 +1,60 @@
+# École Nid Douillet - Production Environment Configuration
+# Copy this content to .env.production file on your Hostinger server
+
+# Server Configuration
+NODE_ENV=production
+PORT=3000
+HOST=0.0.0.0
+
+# MySQL Database Configuration (Your Hostinger Database)
+DATABASE_URL=mysql://u987015349_niddouillet:Shinigami0633@localhost:3306/u987015349_niddouillet
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=u987015349_niddouillet
+DB_USER=u987015349_niddouillet
+DB_PASSWORD=Shinigami0633@
+DB_SSL=false
+
+# JWT Configuration (Generate secure secrets for production)
+JWT_SECRET=EcoleNidDouillet2024SecureJWTSecret!
+JWT_REFRESH_SECRET=EcoleNidDouillet2024RefreshSecret!
+JWT_EXPIRES_IN=1h
+JWT_REFRESH_EXPIRES_IN=7d
+
+# CORS Configuration
+FRONTEND_URL=https://ecoleniddouillet.com
+ALLOWED_ORIGINS=https://ecoleniddouillet.com,https://www.ecoleniddouillet.com
+
+# Email Configuration (Gmail SMTP)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=contact@ecoleniddouillet.com
+EMAIL_PASS=your-gmail-app-password
+EMAIL_FROM=contact@ecoleniddouillet.com
+
+# SMS Configuration (Twilio)
+TWILIO_ACCOUNT_SID=your-twilio-account-sid
+TWILIO_AUTH_TOKEN=your-twilio-auth-token
+TWILIO_PHONE_NUMBER=+212668786368
+
+# Application Configuration
+APP_NAME="École Nid Douillet"
+APP_URL=https://ecoleniddouillet.com
+API_URL=https://ecoleniddouillet.com/api
+
+# Security
+BCRYPT_ROUNDS=12
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX_REQUESTS=100
+
+# Logging
+LOG_LEVEL=info
+LOG_FILE=logs/app.log
+
+# File Upload
+MAX_FILE_SIZE=10485760
+UPLOAD_PATH=uploads/
+
+# Session Configuration
+SESSION_SECRET=EcoleNidDouillet2024SessionSecret!
