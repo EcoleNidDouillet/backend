@@ -27,11 +27,15 @@ const dbConfig = {
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD,
   ssl: false, // Disable SSL for Hostinger shared hosting
+  insecureAuth: true, // Allow insecure authentication
   connectionLimit: 10, // Maximum number of connections in the pool
   acquireTimeout: 60000, // Maximum time to wait for a connection
   timeout: 60000, // Maximum time for a query
   reconnect: true, // Automatically reconnect
-  timezone: '+01:00' // Morocco timezone (UTC+1)
+  timezone: '+01:00', // Morocco timezone (UTC+1)
+  // Additional SSL-related configurations
+  flags: '-FOUND_ROWS',
+  charset: 'utf8mb4'
 };
 
 // Create connection pool
