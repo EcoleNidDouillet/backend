@@ -19,23 +19,28 @@ const logger = winston.createLogger({
   ]
 });
 
-// Database configuration for MySQL
+// Database configuration for MySQL with comprehensive SSL handling
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT) || 3306,
   database: process.env.DB_NAME || 'ecole_nid_douillet',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD,
-  ssl: false, // Disable SSL for Hostinger shared hosting
+  // Comprehensive SSL configuration for Hostinger
+  ssl: {
+    rejectUnauthorized: false
+  },
   insecureAuth: true, // Allow insecure authentication
   connectionLimit: 10, // Maximum number of connections in the pool
   acquireTimeout: 60000, // Maximum time to wait for a connection
   timeout: 60000, // Maximum time for a query
   reconnect: true, // Automatically reconnect
   timezone: '+01:00', // Morocco timezone (UTC+1)
-  // Additional SSL-related configurations
-  flags: '-FOUND_ROWS',
-  charset: 'utf8mb4'
+  charset: 'utf8mb4',
+  // Additional connection flags
+  flags: ['-FOUND_ROWS'],
+  // Enable multiple statements if needed
+  multipleStatements: false
 };
 
 // Create connection pool
