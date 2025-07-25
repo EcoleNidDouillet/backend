@@ -1,7 +1,7 @@
 // École Nid Douillet - Database Configuration
-// MySQL connection and query utilities
+// PostgreSQL connection and query utilities
 
-const mysql = require('mysql2/promise');
+const { Pool } = require('pg');
 const winston = require('winston');
 
 // Configure logger
@@ -19,46 +19,41 @@ const logger = winston.createLogger({
   ]
 });
 
-// Database configuration for MySQL with comprehensive SSL handling
+// Database configuration for PostgreSQL
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT) || 3306,
-  database: process.env.DB_NAME || 'ecole_nid_douillet',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD,
-  // Comprehensive SSL configuration for Hostinger
-  ssl: {
-    rejectUnauthorized: false
-  },
-  insecureAuth: true, // Allow insecure authentication
-  connectionLimit: 10, // Maximum number of connections in the pool
-  acquireTimeout: 60000, // Maximum time to wait for a connection
-  timeout: 60000, // Maximum time for a query
-  reconnect: true, // Automatically reconnect
-  timezone: '+01:00', // Morocco timezone (UTC+1)
-  charset: 'utf8mb4',
-  // Additional connection flags
-  flags: ['-FOUND_ROWS'],
-  // Enable multiple statements if needed
-  multipleStatements: false
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  max: 10, // Maximum number of connections in the pool
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 };
 
-// Create connection pool
-const pool = mysql.createPool(dbConfig);
+// Fallback to individual environment variables if DATABASE_URL is not available
+if (!process.env.DATABASE_URL) {
+  dbConfig.host = process.env.DB_HOST || 'localhost';
+  dbConfig.port = parseInt(process.env.DB_PORT) || 5432;
+  dbConfig.database = process.env.DB_NAME || 'ecole_nid_douillet';
+  dbConfig.user = process.env.DB_USER || 'postgres';
+  dbConfig.password = process.env.DB_PASSWORD;
+  delete dbConfig.connectionString;
+}
 
-// Pool event handlers for MySQL
-pool.on('connection', (connection) => {
-  logger.info('New MySQL connection established');
+// Create connection pool
+const pool = new Pool(dbConfig);
+
+// Pool event handlers for PostgreSQL
+pool.on('connect', (client) => {
+  logger.info('New PostgreSQL connection established');
   // Set timezone for this connection
-  connection.query('SET time_zone = "+01:00"');
+  client.query('SET timezone = "Europe/Paris"');
 });
 
 pool.on('error', (err) => {
-  logger.error('MySQL pool error', err);
-  if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-    logger.info('MySQL connection lost, will reconnect automatically');
+  logger.error('PostgreSQL pool error', err);
+  if (err.code === 'ECONNRESET') {
+    logger.info('PostgreSQL connection lost, will reconnect automatically');
   } else {
-    logger.error('Unexpected MySQL error', err);
+    logger.error('Unexpected PostgreSQL error', err);
   }
 });
 
@@ -66,23 +61,18 @@ pool.on('error', (err) => {
 const query = async (text, params = []) => {
   const start = Date.now();
   try {
-    const [rows, fields] = await pool.execute(text, params);
+    const result = await pool.query(text, params);
     const duration = Date.now() - start;
     
     if (process.env.NODE_ENV === 'development') {
       logger.debug('Executed query', {
         text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
         duration,
-        rows: rows.length
+        rows: result.rows.length
       });
     }
     
-    // Return PostgreSQL-like result object for compatibility
-    return {
-      rows: rows,
-      rowCount: rows.length,
-      fields: fields
-    };
+    return result;
   } catch (error) {
     logger.error('Database query error', {
       text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
@@ -94,23 +84,23 @@ const query = async (text, params = []) => {
   }
 };
 
-// Transaction wrapper for MySQL
+// Transaction wrapper for PostgreSQL
 const transaction = async (callback) => {
-  const connection = await pool.getConnection();
+  const client = await pool.connect();
   try {
-    await connection.beginTransaction();
-    const result = await callback(connection);
-    await connection.commit();
+    await client.query('BEGIN');
+    const result = await callback(client);
+    await client.query('COMMIT');
     return result;
   } catch (error) {
-    await connection.rollback();
+    await client.query('ROLLBACK');
     throw error;
   } finally {
-    connection.release();
+    client.release();
   }
 };
 
-// Health check function for MySQL
+// Health check function for PostgreSQL
 const healthCheck = async () => {
   try {
     const result = await query('SELECT NOW() as current_time, VERSION() as version');
@@ -134,7 +124,7 @@ const ecoleQueries = {
   // Get current academic year
   getCurrentAcademicYear: async () => {
     const result = await query(
-      'SELECT * FROM academic_years WHERE is_active = 1 LIMIT 1'
+      'SELECT * FROM academic_years WHERE is_active = true LIMIT 1'
     );
     return result.rows[0];
   },
